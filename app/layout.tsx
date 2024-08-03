@@ -8,6 +8,7 @@ import { ModalProvider } from "@/components/providers/ModalProvider";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { SocketProvider } from "@/components/providers/SocketProvider";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -50,7 +51,7 @@ export default async function RootLayout({
           >
             <SocketProvider>
               <ModalProvider />
-              {children}
+              <QueryProvider>{children}</QueryProvider>
             </SocketProvider>
           </ThemeProvider>
         </body>

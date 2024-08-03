@@ -10,7 +10,7 @@ import {
 import { io, Socket } from "socket.io-client";
 
 type SocketContextType = {
-  socket: any | null;
+  socket: Socket | null;
   isConnected: boolean;
 };
 
@@ -28,7 +28,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const socketInstance = io(process.env.NEXT_PUBLIC_SITE_URL!);
+    const socketInstance = io(process.env.NEXT_PUBLIC_MESSAGE_GATEWAY_URL!);
 
     socketInstance.on("connect", () => {
       setIsConnected(true);
