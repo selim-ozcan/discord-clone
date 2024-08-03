@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { ModalProvider } from "@/components/providers/ModalProvider";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
+import { SocketProvider } from "@/components/providers/SocketProvider";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -21,7 +22,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // to synchronize clerk user info with the corresponding db profile entity.
-  // lazy work to avoid using clerk webhooks.
+  // workaround to avoid using clerk user update webhooks.
   const user = await currentUser();
 
   if (user) {
@@ -47,8 +48,10 @@ export default async function RootLayout({
             enableSystem={false}
             storageKey="discord-theme"
           >
-            <ModalProvider />
-            {children}
+            <SocketProvider>
+              <ModalProvider />
+              {children}
+            </SocketProvider>
           </ThemeProvider>
         </body>
       </html>

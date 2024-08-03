@@ -48,7 +48,6 @@ const MembersModal = () => {
   const { isOpen, onOpen, onClose, type, data } = useModal();
   const [loadingId, setLoadingId] = useState("");
   const pathname = usePathname();
-  console.log(pathname);
 
   const isModalOpen = isOpen && type === "members";
   const { server } = data as { server: ServerWithMembersWithProfiles };
