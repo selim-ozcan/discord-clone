@@ -22,23 +22,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // to synchronize clerk user info with the corresponding db profile entity.
-  // workaround to avoid using clerk user update webhooks.
-  const user = await currentUser();
-
-  if (user) {
-    console.log("Syncing profile info and user info...");
-    await db.profile.update({
-      where: {
-        userId: user.id,
-      },
-      data: {
-        name: user.fullName || "Guest",
-        imageUrl: user.imageUrl,
-      },
-    });
-  }
-
   return (
     <ClerkProvider afterSignOutUrl="/">
       <html lang="en" suppressHydrationWarning>

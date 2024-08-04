@@ -17,7 +17,7 @@ const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 let MessagesGateway = class MessagesGateway {
     addMessage(data) {
-        this.server.emit(`chat:${data.channelId || data.chatId}:messages`, data);
+        this.server.emit(`chat:${data.channelId || data.conversationId}:messages`, data);
     }
     updateMessage(data) {
         this.server.emit(`chat:${data.channelId || data.chatId}:messages:update`, data);

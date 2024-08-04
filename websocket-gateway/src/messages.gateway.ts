@@ -17,7 +17,10 @@ export class MessagesGateway {
 
   @SubscribeMessage('chat:messages:add')
   addMessage(@MessageBody() data: any) {
-    this.server.emit(`chat:${data.channelId || data.chatId}:messages`, data);
+    this.server.emit(
+      `chat:${data.channelId || data.conversationId}:messages`,
+      data,
+    );
   }
 
   @SubscribeMessage('chat:messages:update')

@@ -4,7 +4,7 @@ import { Member, Message, Profile } from "@prisma/client";
 import ChatWelcome from "./ChatWelcome";
 import { useChatQuery } from "@/hooks/useChatQuery";
 import { Loader2, ServerCrash } from "lucide-react";
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import ChatItem from "./ChatItem";
 import { format } from "date-fns";
 import { useChatSocket } from "@/hooks/useChatSocket";
@@ -43,7 +43,6 @@ const ChatMessages = ({
 }: ChatMessagesProps) => {
   const chatBottomRef = useRef<HTMLDivElement>(null);
   const chatRef = useRef<HTMLDivElement>(null);
-  const topRef = useRef<HTMLDivElement>(null);
 
   const queryKey = `chat:${chatId}`;
   const addKey = `chat:${chatId}:messages`;
@@ -61,7 +60,6 @@ const ChatMessages = ({
   useChatScroll({
     chatRef,
     chatBottomRef,
-    topRef,
     loadMore: fetchNextPage,
     shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
     count: data?.pages?.[0]?.items?.length ?? 0,
@@ -88,7 +86,7 @@ const ChatMessages = ({
       </div>
     );
   }
-  console.log(data?.pages);
+
   return (
     <div ref={chatRef} className="flex-1 flex flex-col py-4 overflow-y-auto">
       {!hasNextPage && <div className="flex-1"></div>}
@@ -112,27 +110,19 @@ const ChatMessages = ({
           <React.Fragment key={i}>
             {group.items.map(
               (message: MessageWithMemberWithProfile, j: number) => (
-                <div
+                <ChatItem
                   key={message.id}
-                  ref={
-                    j === 9 && i === Object.keys(data.pages).length - 1
-                      ? topRef
-                      : null
-                  }
-                >
-                  <ChatItem
-                    id={message.id}
-                    currentMember={member}
-                    member={message.member}
-                    content={message.content}
-                    fileUrl={message.fileUrl}
-                    deleted={message.deleted}
-                    timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
-                    isUpdated={message.updatedAt !== message.createdAt}
-                    socketUrl={socketUrl}
-                    socketQuery={socketQuery}
-                  />
-                </div>
+                  id={message.id}
+                  currentMember={member}
+                  member={message.member}
+                  content={message.content}
+                  fileUrl={message.fileUrl}
+                  deleted={message.deleted}
+                  timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
+                  isUpdated={message.updatedAt !== message.createdAt}
+                  socketUrl={socketUrl}
+                  socketQuery={socketQuery}
+                />
               )
             )}
           </React.Fragment>
